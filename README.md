@@ -1,7 +1,7 @@
-Camel_DataBroker_PlugIn
-=======================
+Apache-Camel_DataBroker_PlugIn
+==============================
 
-Camel DataBroker PlugIn
+Apache Camel DataBroker PlugIn
 
 License
 =======
