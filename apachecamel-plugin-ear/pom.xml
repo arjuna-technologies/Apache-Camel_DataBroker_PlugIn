@@ -32,6 +32,11 @@
             <version>1.0.0p1m1</version>
             <type>ejb</type>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>2.14.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -42,6 +47,11 @@
                 <configuration>
                     <includeLibInApplicationXml>true</includeLibInApplicationXml>
                     <modules>
+                        <jarModule>
+                            <groupId>org.apache.camel</groupId>
+                            <artifactId>camel-core</artifactId>
+                            <includeInApplicationXml>true</includeInApplicationXml>
+                        </jarModule>
                         <ejbModule>
                             <groupId>com.arjuna.dbplugins.apachecamel</groupId>
                             <artifactId>apachecamel-plugin</artifactId>
