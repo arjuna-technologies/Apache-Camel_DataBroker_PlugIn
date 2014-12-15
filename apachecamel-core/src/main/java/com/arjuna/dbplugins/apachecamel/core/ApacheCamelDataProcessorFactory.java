@@ -70,7 +70,9 @@ public class ApacheCamelDataProcessorFactory implements DataFlowNodeFactory
             if (metaProperties.isEmpty())
             {
                 List<String> propertyNames = new LinkedList<String>();
-                
+
+                propertyNames.add(ApacheCamelDataProcessor.CAMELCONFIG_PROPNAME);
+
                 return propertyNames;
             }
             else

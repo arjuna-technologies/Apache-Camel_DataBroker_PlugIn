@@ -24,6 +24,8 @@ public class ApacheCamelDataProcessor implements DataProcessor
 {
     private static final Logger logger = Logger.getLogger(ApacheCamelDataProcessor.class.getName());
 
+    public static final String CAMELCONFIG_PROPNAME = "Camel Config";
+
     public ApacheCamelDataProcessor(String name, Map<String, String> properties)
     {
         logger.log(Level.FINE, "ApacheCamelDataProcessor: " + name + ", " + properties);
@@ -76,6 +78,15 @@ public class ApacheCamelDataProcessor implements DataProcessor
     @PreDeactivated
     public void finish()
     {
+    }
+
+    public void consume(String data)
+    {
+        String result;
+
+        result = data;
+
+        _dataProvider.produce(result);
     }
 
     @Override
