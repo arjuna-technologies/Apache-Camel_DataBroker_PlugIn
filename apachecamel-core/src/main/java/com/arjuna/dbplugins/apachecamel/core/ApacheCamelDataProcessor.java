@@ -11,13 +11,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.camel.CamelContext;
+import org.apache.camel.impl.DefaultCamelContext;
 import com.arjuna.databroker.data.DataConsumer;
 import com.arjuna.databroker.data.DataProvider;
 import com.arjuna.databroker.data.DataFlow;
 import com.arjuna.databroker.data.DataProcessor;
 import com.arjuna.databroker.data.jee.annotation.DataConsumerInjection;
 import com.arjuna.databroker.data.jee.annotation.DataProviderInjection;
-import com.arjuna.databroker.data.jee.annotation.PreActivated;
+import com.arjuna.databroker.data.jee.annotation.PostActivated;
 import com.arjuna.databroker.data.jee.annotation.PreDeactivated;
 
 public class ApacheCamelDataProcessor implements DataProcessor
@@ -70,14 +72,33 @@ public class ApacheCamelDataProcessor implements DataProcessor
         _properties = properties;
     }
 
-    @PreActivated
+    @PostActivated
     public void start()
     {
+        try
+        {
+            _camelContext = new DefaultCamelContext();
+            _camelContext.start();
+        }
+        catch (Throwable throwable)
+        {
+            logger.log(Level.WARNING, "ApacheCamelDataProcessor: failed to start camel context", throwable);
+            _camelContext = null;
+        }
     }
 
     @PreDeactivated
     public void finish()
     {
+        try
+        {
+            _camelContext.stop();
+        }
+        catch (Throwable throwable)
+        {
+            logger.log(Level.WARNING, "ApacheCamelDataProcessor: failed to stop camel context", throwable);
+        }
+        _camelContext = null;
     }
 
     public void consume(String data)
@@ -128,6 +149,8 @@ public class ApacheCamelDataProcessor implements DataProcessor
         else
             return null;
     }
+
+    private CamelContext _camelContext;
 
     private DataFlow             _dataFlow;
     private String               _name;
