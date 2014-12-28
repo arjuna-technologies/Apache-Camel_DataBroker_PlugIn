@@ -25,7 +25,7 @@ public class ApacheCamelDataProcessorTest
     @Test
     public void invocation01()
     {
-    	DataFlowNodeLifeCycleControl dataFlowNodeLifeCycleControl = null;
+    	DataFlowNodeLifeCycleControl dataFlowNodeLifeCycleControl = TestJ;
 
         String              name       = "Apache Camel Data Processor";
         Map<String, String> properties = new HashMap<String, String>();
