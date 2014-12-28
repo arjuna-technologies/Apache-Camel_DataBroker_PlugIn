@@ -7,12 +7,10 @@ package com.arjuna.dbplugins.tests.apachecamel.core;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
-
 import org.junit.Test;
-
 import static org.junit.Assert.*;
-
 import com.arjuna.databroker.data.connector.ObservableDataProvider;
 import com.arjuna.databroker.data.connector.ObserverDataConsumer;
 import com.arjuna.databroker.data.core.DataFlowNodeLifeCycleControl;
@@ -36,9 +34,9 @@ public class ApacheCamelDataProcessorTest
         ApacheCamelDataProcessor apacheCamelDataSource = new ApacheCamelDataProcessor(name, properties);
         DummyDataSink            dummyDataSink         = new DummyDataSink("Dummy Data Sink", Collections.<String, String>emptyMap());
 
-        dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(dummyDataSource, null);
-        dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(apacheCamelDataSource, null);
-        dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(dummyDataSink, null);
+        dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), dummyDataSource, null);
+        dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), apacheCamelDataSource, null);
+        dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), dummyDataSink, null);
 
         ((ObservableDataProvider<String>) dummyDataSource.getDataProvider(String.class)).addDataConsumer((ObserverDataConsumer<String>) apacheCamelDataSource.getDataConsumer(String.class));
         ((ObservableDataProvider<String>) apacheCamelDataSource.getDataProvider(String.class)).addDataConsumer((ObserverDataConsumer<String>) dummyDataSink.getDataConsumer(String.class));
