@@ -11,8 +11,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.apache.camel.CamelContext;
+import org.apache.camel.Consumer;
+import org.apache.camel.Endpoint;
+import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultCamelContext;
+
 import com.arjuna.databroker.data.DataConsumer;
 import com.arjuna.databroker.data.DataProvider;
 import com.arjuna.databroker.data.DataFlow;
@@ -26,7 +32,8 @@ public class ApacheCamelDataProcessor implements DataProcessor
 {
     private static final Logger logger = Logger.getLogger(ApacheCamelDataProcessor.class.getName());
 
-    public static final String CAMELCONFIG_PROPNAME = "Camel Config";
+    public static final String CAMELCONFIG_PROPNAME  = "Camel Config";
+    public static final String ENDPOINTNAME_PROPNAME = "Endpoint Name";
 
     public ApacheCamelDataProcessor(String name, Map<String, String> properties)
     {
@@ -79,6 +86,9 @@ public class ApacheCamelDataProcessor implements DataProcessor
         {
             _camelContext = new DefaultCamelContext();
             _camelContext.start();
+            _endpoint = _camelContext.getEndpoint(_properties.get(ENDPOINTNAME_PROPNAME));
+            _consumer = _endpoint.createConsumer(null);
+            _producer = _endpoint.createProducer();
         }
         catch (Throwable throwable)
         {
@@ -151,6 +161,9 @@ public class ApacheCamelDataProcessor implements DataProcessor
     }
 
     private CamelContext _camelContext;
+    private Endpoint     _endpoint;
+    private Consumer     _consumer;
+    private Producer     _producer;
 
     private DataFlow             _dataFlow;
     private String               _name;
