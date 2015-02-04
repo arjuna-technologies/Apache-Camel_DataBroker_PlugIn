@@ -17,6 +17,7 @@ import com.arjuna.databroker.data.core.DataFlowNodeLifeCycleControl;
 import com.arjuna.dbplugins.apachecamel.core.ApacheCamelDataProcessor;
 import com.arjuna.dbutilities.testsupport.dataflownodes.dummy.DummyDataSink;
 import com.arjuna.dbutilities.testsupport.dataflownodes.dummy.DummyDataSource;
+import com.arjuna.dbutilities.testsupport.dataflownodes.lifecycle.TestJEEDataFlowNodeLifeCycleControl;
 
 public class ApacheCamelDataProcessorTest
 {
@@ -25,7 +26,7 @@ public class ApacheCamelDataProcessorTest
     @Test
     public void invocation01()
     {
-    	DataFlowNodeLifeCycleControl dataFlowNodeLifeCycleControl = TestJ;
+        DataFlowNodeLifeCycleControl dataFlowNodeLifeCycleControl = new TestJEEDataFlowNodeLifeCycleControl();
 
         String              name       = "Apache Camel Data Processor";
         Map<String, String> properties = new HashMap<String, String>();
@@ -34,15 +35,15 @@ public class ApacheCamelDataProcessorTest
         ApacheCamelDataProcessor apacheCamelDataSource = new ApacheCamelDataProcessor(name, properties);
         DummyDataSink            dummyDataSink         = new DummyDataSink("Dummy Data Sink", Collections.<String, String>emptyMap());
 
-        dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), dummyDataSource, null);
-        dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), apacheCamelDataSource, null);
-        dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), dummyDataSink, null);
+        dataFlowNodeLifeCycleControl.completeCreationAndActivateDataFlowNode(UUID.randomUUID().toString(), dummyDataSource, null);
+        dataFlowNodeLifeCycleControl.completeCreationAndActivateDataFlowNode(UUID.randomUUID().toString(), apacheCamelDataSource, null);
+        dataFlowNodeLifeCycleControl.completeCreationAndActivateDataFlowNode(UUID.randomUUID().toString(), dummyDataSink, null);
 
         ((ObservableDataProvider<String>) dummyDataSource.getDataProvider(String.class)).addDataConsumer((ObserverDataConsumer<String>) apacheCamelDataSource.getDataConsumer(String.class));
         ((ObservableDataProvider<String>) apacheCamelDataSource.getDataProvider(String.class)).addDataConsumer((ObserverDataConsumer<String>) dummyDataSink.getDataConsumer(String.class));
 
         dummyDataSource.sendData("Test");
-        
+
         try
         {
             Thread.sleep(5000);
